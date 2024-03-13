@@ -1,4 +1,4 @@
-import React, {useState, useEffect,  useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -19,24 +19,21 @@ import Tts from 'react-native-tts';
 import soundGif from '../assets/animation.gif';
 import mengetikGif from '../assets/mengetik.gif';
 import imageGif from '../assets/aichat.gif';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
-
-
 
 const CustomHeader = ({navigation, jsonData}) => {
   return (
-    <LinearGradient colors={['#87CEFA', '#F8F8FF']} style={styles.header}>
+    <LinearGradient colors={['#EAEAF5', '#EAEAF5']} style={styles.header}>
       <TouchableOpacity
         onPress={() => navigation.navigate('HomeScreen', {jsonData})}
         style={styles.backButton}>
         <Image
-          source={require('../assets/icons/back.png')}
+          source={require('../assets/icons/backleft.png')}
           style={{width: 24, height: 24}}
         />
       </TouchableOpacity>
-      <Image source={imageGif} style={{width: 40, height: 30, marginLeft: -50}} />
-      <Text style={styles.headerText}>AiChat</Text>
+      <Text style={styles.headerText}>CourseBot</Text>
     </LinearGradient>
   );
 };
@@ -52,11 +49,10 @@ const ChatScreen = ({navigation, route}) => {
   const [questionHistory, setQuestionHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // Added loading state
 
-
   const scrollViewRef = useRef(null);
 
-   // Fungsi untuk menyimpan recent questions ke AsyncStorage
-   const saveRecentQuestionsToAsyncStorage = async (questions) => {
+  // Fungsi untuk menyimpan recent questions ke AsyncStorage
+  const saveRecentQuestionsToAsyncStorage = async questions => {
     try {
       await AsyncStorage.setItem('recentQuestions', JSON.stringify(questions));
     } catch (error) {
@@ -150,19 +146,19 @@ const ChatScreen = ({navigation, route}) => {
       return;
     }
     setIsLoading(true);
-   
-  // Cek apakah pertanyaan sudah ada dalam daftar
-  if (!questionHistory.includes(user_message)) {
-    // Jika belum ada, tambahkan ke daftar
-    const updatedQuestions = [...questionHistory, user_message];
-    setQuestionHistory(updatedQuestions);
 
-    // Panggil fungsi untuk menyimpan recent questions ke AsyncStorage
-    saveRecentQuestionsToAsyncStorage(updatedQuestions);
-  }
+    // Cek apakah pertanyaan sudah ada dalam daftar
+    if (!questionHistory.includes(user_message)) {
+      // Jika belum ada, tambahkan ke daftar
+      const updatedQuestions = [...questionHistory, user_message];
+      setQuestionHistory(updatedQuestions);
+
+      // Panggil fungsi untuk menyimpan recent questions ke AsyncStorage
+      saveRecentQuestionsToAsyncStorage(updatedQuestions);
+    }
 
     handleLocationInquiry(user_message);
-    
+
     const newUserMessage = {
       sender: 'User',
       content: user_message,
@@ -220,7 +216,7 @@ const ChatScreen = ({navigation, route}) => {
             content: jsonData[0].answer,
           };
 
-          setChatMessages((prevChatMessages) => [
+          setChatMessages(prevChatMessages => [
             ...chatMessages,
             newUserMessage,
             newBotMessage,
@@ -237,44 +233,44 @@ const ChatScreen = ({navigation, route}) => {
     setRecognizedText('');
   };
 
-
-  const handleLocationInquiry = (user_message) => {
+  const handleLocationInquiry = user_message => {
     const destinations = {
-      "poli saraf": 'Poli Saraf',
-      "poli bedah": 'Poli Bedah',
-      "poli kulit dan kelamin": 'Poli Kulit dan Kelamin',
-      "poli penyakit dalam ": 'Poli Penyakit dalam ',
-      "poli anak": 'Poli Anak',
-      "poli gigi": 'Poli Gigi',
-      "poli mata": 'Poli Mata',
-      "poli umum": 'Poli Umum',
-      "poli tht": 'Poli THT',
-      "poli fisik dan rehabilitasi": 'Poli Fisik dan Rehabilitasi',
-      "poli kandungan": 'Poli Kandungan',
-      "poli mcu pelaut / kesehatan pelaut": 'Poli MCU Pelaut / Kesehatan Pelaut',
-      "poli mcu": 'Poli MCU',
-      "poli medikolegal": 'Poli Medikolegal ',
-      "poli jantung dan pembuluh darah": 'Poli Jantung dan Pembuluh Darah',
-      "poli paru": 'Poli Paru',
-      "igd": 'IGD',
-      "pusat informasi rs": 'Pusat Informasi RS'
+      'poli saraf': 'Poli Saraf',
+      'poli bedah': 'Poli Bedah',
+      'poli kulit dan kelamin': 'Poli Kulit dan Kelamin',
+      'poli penyakit dalam ': 'Poli Penyakit dalam ',
+      'poli anak': 'Poli Anak',
+      'poli gigi': 'Poli Gigi',
+      'poli mata': 'Poli Mata',
+      'poli umum': 'Poli Umum',
+      'poli tht': 'Poli THT',
+      'poli fisik dan rehabilitasi': 'Poli Fisik dan Rehabilitasi',
+      'poli kandungan': 'Poli Kandungan',
+      'poli mcu pelaut / kesehatan pelaut':
+        'Poli MCU Pelaut / Kesehatan Pelaut',
+      'poli mcu': 'Poli MCU',
+      'poli medikolegal': 'Poli Medikolegal ',
+      'poli jantung dan pembuluh darah': 'Poli Jantung dan Pembuluh Darah',
+      'poli paru': 'Poli Paru',
+      igd: 'IGD',
+      'pusat informasi rs': 'Pusat Informasi RS',
     };
-  
+
     const lowerCaseUserMessage = user_message.toLowerCase();
-  
+
     for (let destination in destinations) {
       if (lowerCaseUserMessage.includes(destination)) {
-        navigation.navigate('GeolocationScreen', { location: destinations[destination] });
+        navigation.navigate('GeolocationScreen', {
+          location: destinations[destination],
+        });
         return;
       }
     }
-  
   };
-  const handleRecentQuestionSelect = (question) => {
+  const handleRecentQuestionSelect = question => {
     setMessage(question);
-   
   };
-  
+
   const handleMicrophonePressIn = () => {
     setIsPressing(true);
     startRecognition();
@@ -289,7 +285,7 @@ const ChatScreen = ({navigation, route}) => {
 
   const scrollToBottom = () => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
+      scrollViewRef.current.scrollToEnd({animated: true});
     }
   };
 
@@ -304,12 +300,11 @@ const ChatScreen = ({navigation, route}) => {
     scrollToBottom();
   }, [chatMessages]);
 
-  
   return (
-    <ImageBackground source={iBackgroundchat} style={{ flex: 1 }}>
+    <View style={{flex: 1, backgroundColor: '#EAEAF5'}}>
       <CustomHeader navigation={navigation} jsonData={jsonData} />
-      <View style={{ flex: 1, justifyContent: 'flex-end', marginTop: 50 }}>
-        <View style={{ padding: 10 }}>
+      <View style={{flex: 1, justifyContent: 'flex-end', marginTop: 50}}>
+        <View style={{padding: 10}}>
           <ScrollView ref={scrollViewRef}>
             {chatMessages.map((chat, index) => (
               <View
@@ -321,8 +316,8 @@ const ChatScreen = ({navigation, route}) => {
                 }}>
                 {chat.sender !== 'User' && (
                   <Image
-                    source={require('../assets/icons/chatbot.png')}
-                    style={{ width: 24, height: 24, marginRight: 5 }}
+                    source={require('../assets/icons/bot3.png')}
+                    style={{width: 24, height: 24, marginRight: 5}}
                   />
                 )}
                 <View
@@ -335,7 +330,7 @@ const ChatScreen = ({navigation, route}) => {
                   <View
                     style={{
                       backgroundColor:
-                        chat.sender === 'User' ? '#E0FFFF' : '#AFEEEE',
+                        chat.sender === 'User' ? '#8557B1' : '#FFCD38',
                       borderRadius: 10,
                       paddingHorizontal: 10,
                       paddingVertical: 5,
@@ -357,20 +352,16 @@ const ChatScreen = ({navigation, route}) => {
                 </View>
                 {chat.sender === 'User' && (
                   <Image
-                    source={require('../assets/icons/user.png')}
-                    style={{ width: 24, height: 24, marginLeft: 5 }}
+                    source={require('../assets/icons/usser.png')}
+                    style={{width: 24, height: 24, marginLeft: 5}}
                   />
                 )}
               </View>
             ))}
           </ScrollView>
         </View>
-
+        {/* 
         <View style={styles.recentQuestionContainer}>
-        <Image
-          source={require('../assets/icons/ask.png')}
-          style={{ width: 40, height: 40, marginLeft: -20 }}
-        />
           <ScrollView
             horizontal={true}
             contentContainerStyle={{ paddingLeft: 10 }}>
@@ -383,9 +374,8 @@ const ChatScreen = ({navigation, route}) => {
               </TouchableOpacity>
             ))}
           </ScrollView>
-        </View>
+        </View>*/}
         <View style={styles.inputContainer}>
-          
           <TextInput
             style={styles.inputBox}
             placeholder="Ketik pesan"
@@ -393,25 +383,18 @@ const ChatScreen = ({navigation, route}) => {
             value={message}
             onChangeText={setMessage}
           />
-          <TouchableOpacity onPress={() => handleListen(message)} style={styles.audioButton}>
-            <Icon name="volume-high" size={24} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPressIn={handleMicrophonePressIn}
-            onPressOut={handleMicrophonePressOut}
-            style={styles.voiceButton}>
-            {isPressing ? (
-              <Image source={soundGif} style={{ width: 45, height: 45 }} />
-            ) : (
-              <Image
-                source={require('../assets/icons/microphone.png')}
-                style={{ width: 45, height: 45 }}
-              />
-            )}
-          </TouchableOpacity>
-  
           {isLoading && (
-            <View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+              }}>
               <Image source={mengetikGif} style={styles.gifImage} />
             </View>
           )}
@@ -421,16 +404,14 @@ const ChatScreen = ({navigation, route}) => {
         </View>
       </View>
 
-
       {isPressing && (
         <View style={styles.gifContainer}>
           <Image source={soundGif} style={styles.gifImage} />
         </View>
       )}
-    </ImageBackground>
+    </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -449,19 +430,22 @@ const styles = StyleSheet.create({
     zIndex: 2, // Gunakan z-index untuk mengatur tumpukan lapisan
   },
   headerText: {
-    color: '#808080',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    color: '#303B3B',
+    top: 5,
+    borderBottomColor: '#ABABA7',
+    borderBottomWidth: 1,
+    width: 315,
     textAlign: 'center',
-    justifyContent: 'center',
-    marginLeft: 1,
-    marginTop: 8,
+    left: -50,
+    paddingBottom: 3,
   },
   backButton: {
     padding: 5,
     marginRight: 50,
   },
- 
+
   messageBubble: {
     maxWidth: '70%',
     marginVertical: 5,
@@ -496,7 +480,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     color: 'black',
-    backgroundColor: '#E0FFFF',
+    backgroundColor: '#FFCD38',
   },
   voiceButton: {
     marginLeft: 10,
@@ -542,9 +526,9 @@ const styles = StyleSheet.create({
     marginLeft: 35,
   },
   recentQuestionButton: {
-    backgroundColor: 'transparent', 
-    borderWidth: 1,                
-    borderColor: '#0000CD',       
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#0000CD',
     borderRadius: 13,
     padding: 5,
     margin: 7,

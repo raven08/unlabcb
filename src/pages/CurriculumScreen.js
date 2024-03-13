@@ -1,3 +1,4 @@
+// Import statements (unchanged)
 import React, {useState, useEffect} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {
@@ -17,7 +18,7 @@ const CurriculumScreen = ({navigation, route}) => {
   const {jsonData} = route.params;
   const [curriculumData, setCurriculumData] = useState([]);
 
-  // set curriculumData to empty array on screen focus
+  // set curriculumData to an empty array on screen focus
   useFocusEffect(
     React.useCallback(() => {
       setCurriculumData([]);
@@ -26,11 +27,9 @@ const CurriculumScreen = ({navigation, route}) => {
   );
 
   const fetchData = () => {
-    // Ganti URL dengan URL sesuai dengan server Anda
     const apiUrl =
       'http://103.250.10.38/admin/adminchatbot/mobile/viewcurriculum.php';
 
-    // Ganti dengan cara Anda mendapatkan email dari aplikasi mobile
     const email = jsonData[0].email;
 
     fetch(`${apiUrl}?email=${email}`)
@@ -64,7 +63,7 @@ const CurriculumScreen = ({navigation, route}) => {
         <View key={index}>
           <Text style={styles.semesterHeader}>{`${semester}`}</Text>
           <View style={styles.tableContainer}>
-            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+            <Table borderStyle={{borderWidth: 2, borderColor: 'black'}}>
               <Row
                 data={tableHead}
                 style={styles.head}
@@ -76,7 +75,9 @@ const CurriculumScreen = ({navigation, route}) => {
                   data={rowData}
                   style={[
                     styles.row,
-                    rowIndex % 2 && {backgroundColor: '#F7F6E7'},
+                    {
+                      backgroundColor: rowIndex % 2 === 1 ? 'white' : 'white',
+                    },
                   ]}
                   textStyle={styles.text}
                 />
@@ -90,7 +91,7 @@ const CurriculumScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      {/* header */}
+      {/* Header */}
       <Text style={styles.title2}>View Curriculum</Text>
       <TouchableOpacity
         style={styles.notificationIcon}
@@ -111,7 +112,6 @@ const CurriculumScreen = ({navigation, route}) => {
 export default CurriculumScreen;
 
 const styles = StyleSheet.create({
-  // ... (your existing styles)
   container: {
     flex: 1,
     backgroundColor: '#EAEAF5',
@@ -150,14 +150,14 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   semesterHeader: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: 'Poppins-Bold',
-    color: '#303B3B',
+    color: 'black',
     marginBottom: -5,
     marginTop: 20,
     marginLeft: 20,
   },
-  head: {height: 55, backgroundColor: '#FFCD38'},
-  text: {margin: 6},
-  row: {flexDirection: 'row', backgroundColor: '#FFF1C1'},
+  head: {height: 55, backgroundColor: '#FFCD38', },
+  text: {margin: 6, color: 'black', fontFamily: 'Poppins-Bold', fontSize: 10},
+  row: {flexDirection: 'row'},
 });
