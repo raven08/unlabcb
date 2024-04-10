@@ -104,7 +104,7 @@ const SignInScreen = ({navigation}) => {
     });
 
     Promise.race([
-      fetch('http://103.250.10.38/admin/adminchatbot/mobile/loginmobile.php', {
+      fetch('http://103.210.55.63/admin/adminchatbot/mobile/loginmobile.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -135,7 +135,6 @@ const SignInScreen = ({navigation}) => {
 
           const jsonData = JSON.parse(jsonString);
 
-          
           navigation.navigate('HomeScreen', {jsonData});
         }
       })

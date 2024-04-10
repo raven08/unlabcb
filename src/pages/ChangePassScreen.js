@@ -76,7 +76,7 @@ const ChangePassScreen = ({navigation, route}) => {
 
     Promise.race([
       fetch(
-        'http://103.250.10.38/admin/adminchatbot/mobile/changepasswordmobile.php',
+        'http://103.210.55.63/admin/adminchatbot/mobile/changepasswordmobile.php',
         {
           method: 'POST',
           headers: {
