@@ -15,59 +15,78 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({navigation, route}) => {
   const {jsonData} = route.params;
+  const email = jsonData[0].email; // Mengambil email dari jsonData
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState([]);
 
   const flatListRef = useRef(null);
 
-const sendQuestion = async () => {
-  try {
-    const response = await fetch('http://103.210.55.63:5000/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        question: inputText,
-      }),
-    });
-    const responseData = await response.text();
-    console.log('Raw Response:', responseData);
+  const sendQuestion = async () => {
+    try {
+      const response = await fetch('http://103.210.55.63:5000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: inputText,
+          email: email, // Menggunakan email yang diambil dari jsonData
+        }),
+      });
+      const responseData = await response.text();
+      console.log('Raw Response:', responseData);
 
-    // Mengambil bagian JSON dengan menggunakan regex
-    const jsonString = responseData.match(/\{.*\}/)[0];
+      const jsonString = responseData.match(/\{.*\}/)[0];
+      const formattedJsonString = jsonString.replace(/'/g, '"');
+      const json_data = JSON.parse(formattedJsonString);
 
-    // Mengganti tanda kutip tunggal menjadi ganda untuk memenuhi format JSON
-    const formattedJsonString = jsonString.replace(/'/g, '"');
+      const res_response = json_data.response;
+      const res_threshold = json_data.decision_threshold;
+      const res_pred_intent = json_data.predicted_intent;
+      const res_confidence = json_data.confidence_score;
+      const res_time = json_data.time;
+      const res_date = json_data.date;
 
-    // Parse string JSON menjadi objek JavaScript
-    const json_data = JSON.parse(formattedJsonString);
+      console.log('Email:', email); // Log email di sini
+      console.log('Category:', res_pred_intent);
+      console.log('Question:', inputText);
+      console.log('Answer:', res_response);
+      console.log('Confidence Score:', res_confidence);
+      console.log('Decision Threshold:', res_threshold);
+      console.log('Time:', res_time);
+      console.log('Date:', res_date);
 
-    const res_response = json_data.response;
-    const res_threshold = json_data.decision_threshold;
-    const res_pred_intent = json_data.predicted_intent;
-    const res_confidence = json_data.confidence_score;
-    const res_time = json_data.time;
-    const res_date = json_data.date;
+      const uploadResponse = await fetch(
+        'http://103.210.55.63:5000/save-to-database',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            category: res_pred_intent,
+            user_question: inputText,
+            chatbot_answer: res_response,
+            decision_threshold: res_threshold,
+            time: res_time,
+            date: res_date,
+          }),
+        },
+      );
 
-    // Log extracted data
-    console.log('Response:', res_response);
-    console.log('Decision Threshold:', res_threshold);
-    console.log('Predicted Intent:', res_pred_intent);
-    console.log('Confidence Score:', res_confidence);
-    console.log('Time:', res_time);
-    console.log('Date:', res_date);
+      const newMessage = {text: inputText, from: 'user'};
+      const serverResponseMessage = {text: res_response, from: 'server'};
+      setMessages([...messages, newMessage, serverResponseMessage]);
+      setInputText('');
+      const uploadResponseData = await uploadResponse.json();
+      console.log('Upload Response:', uploadResponseData);
 
-    // Update state with response data
-    const newMessage = {text: inputText, from: 'user'};
-    const serverResponseMessage = {text: res_response, from: 'server'};
-    setMessages([...messages, newMessage, serverResponseMessage]);
-    setInputText('');
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-
+      
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const renderItem = ({item}) => (
     <View
@@ -99,10 +118,8 @@ const sendQuestion = async () => {
     </View>
   );
 
-
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View
         style={{
           flexDirection: 'row',
@@ -151,7 +168,6 @@ const sendQuestion = async () => {
           placeholder="Write your message"
           placeholderTextColor="#000000"
         />
-
         <TouchableOpacity onPress={sendQuestion}>
           <Image
             source={require('../assets/icons/sen1.png')}
@@ -192,7 +208,7 @@ const styles = StyleSheet.create({
   },
   userMessageContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end', // Keep user message position
+    justifyContent: 'flex-end',
     alignItems: 'center',
     marginVertical: 5,
     right: 50,
@@ -221,8 +237,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   userIcon: {
-    marginRight: 5, // Add space between icon and message text
-    marginLeft: 5, // Add space between icon and message text
+    marginRight: 5,
+    marginLeft: 5,
   },
   robotIcon: {
     marginRight: 5,
