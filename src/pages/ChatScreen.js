@@ -18,6 +18,7 @@ const ChatScreen = ({navigation, route}) => {
   const email = jsonData[0].email; // Mengambil email dari jsonData
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState([]);
+  const [recentQuestions, setRecentQuestions] = useState([]);
 
   const flatListRef = useRef(null);
 
@@ -82,7 +83,7 @@ const ChatScreen = ({navigation, route}) => {
       const uploadResponseData = await uploadResponse.json();
       console.log('Upload Response:', uploadResponseData);
 
-      
+      setRecentQuestions([inputText, ...recentQuestions]); // Menambah pertanyaan baru ke awal daftar
     } catch (error) {
       console.error('Error:', error);
     }
@@ -159,7 +160,22 @@ const ChatScreen = ({navigation, route}) => {
         onContentSizeChange={() =>
           flatListRef.current.scrollToEnd({animated: true})
         }
+        style={{flex: 1, width: '100%'}}
       />
+      <View style={styles.recentQuestionsContainer}>
+        <FlatList
+          horizontal
+          data={recentQuestions}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              onPress={() => setInputText(item)}
+              style={[styles.recentQuestionItem, {width: item.length * 10}]}>
+              <Text style={styles.recentQuestionText}>{item}</Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -211,7 +227,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginVertical: 5,
-    right: 50,
+
     marginLeft: 100,
   },
   serverMessageContainer: {
@@ -247,6 +263,27 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 5,
     marginRight: 30,
+  },
+  recentQuestionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    marginLeft: 35,
+  },
+  recentQuestionItem: {
+    padding: 10,
+    backgroundColor: 'transparent', // Make background transparent
+    borderColor: '#FFCD38', // Set border color to #FFCD38
+    borderWidth: 1, // Add border
+    borderRadius: 30,
+    marginBottom: 5,
+    marginRight: 5,
+    padding: 5,
+    margin: 7, // Add margin right to separate items
+  },
+  recentQuestionText: {
+    fontSize: 16,
+    color: 'black',
   },
 });
 
