@@ -28,7 +28,7 @@ const CurriculumScreen = ({navigation, route}) => {
 
   const fetchData = () => {
     const apiUrl =
-      'http://103.210.55.63/admin/adminchatbot/mobile/viewcurriculum.php';
+      'https://coursebot.online/admin/adminchatbot/mobile/viewcurriculum.php';
 
     const email = jsonData[0].email;
 

@@ -76,7 +76,7 @@ const ChangePassScreen = ({navigation, route}) => {
 
     Promise.race([
       fetch(
-        'http://103.210.55.63/admin/adminchatbot/mobile/changepasswordmobile.php',
+        'https://coursebot.online/admin/adminchatbot/mobile/changepasswordmobile.php',
         {
           method: 'POST',
           headers: {
@@ -169,6 +169,7 @@ const ChangePassScreen = ({navigation, route}) => {
             {/* <Text style={styles.userProfileFullName}>
               {jsonData[0].fullname}
             </Text> */}
+            <Text style={styles.userProfileEmail}>{jsonData[0].fullname}</Text>
             <Text style={styles.userProfileEmail}>{jsonData[0].email}</Text>
           </View>
         </View>

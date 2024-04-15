@@ -24,7 +24,7 @@ const ChatScreen = ({navigation, route}) => {
 
   const sendQuestion = async () => {
     try {
-      const response = await fetch('http://103.210.55.63:5000/chat', {
+      const response = await fetch('http://coursebot.online:5000/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

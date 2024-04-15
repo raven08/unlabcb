@@ -104,7 +104,7 @@ const SignInScreen = ({navigation}) => {
     });
 
     Promise.race([
-      fetch('http://103.210.55.63/admin/adminchatbot/mobile/loginmobile.php', {
+      fetch('https://coursebot.online/admin/adminchatbot/mobile/loginmobile.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
