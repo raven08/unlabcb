@@ -65,46 +65,73 @@ const HomeScreen = ({navigation, route}) => {
         style={styles.image}
         resizeMode="cover">
         <Animatable.View animation="zoomInUp">
-          <Text style={styles.text1}>Welcome to CourseBot</Text>
-          <Text style={styles.text2}>Apps</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileScreen', {jsonData})}>
-            <View style={styles.circle} />
-            <Image
-              source={require('../assets/icons/userhome.png')}
-              style={styles.Profil}
-            />
-          </TouchableOpacity>
+          <View style={styles.header}>
+            <Text style={styles.text1}>Welcome to CourseBot</Text>
+            <Text style={styles.text2}>Apps</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ProfileScreen', {jsonData})}>
+              <View style={styles.circle} />
+              <Image
+                source={require('../assets/icons/userhome.png')}
+                style={styles.Profil}
+              />
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ChatScreen', {jsonData})}>
-            <View style={styles.getback} />
-            <Text style={styles.gettext}>Get Started</Text>
-            <Image
-              source={require('../assets/icons/get.png')}
-              style={styles.get}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ChangePassScreen', {jsonData})}>
-            <View style={styles.back2} />
-            <Icon name="cog" size={40} color="#000" style={styles.icon} />
-            <Text style={styles.text4}>Change Password</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CurriculumScreen', {jsonData})}>
-            <View style={styles.back} />
-            <Image
-              source={require('../assets/icons/cur.png')}
-              style={styles.cur}
-            />
-            <Text style={styles.text3}>View Curriculum</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleButtonPress}>
-            <View style={styles.back1} />
-            <Icon name="sign-out" size={40} color="#000" style={styles.exit} />
-            <Text style={styles.text5}>Exit App</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              style={styles.btnchat}
+              onPress={() => navigation.navigate('ChatScreen', {jsonData})}>
+              <Text style={styles.textchat}>
+                Get Started{'                 '}
+                <Icon
+                  name="arrow-right"
+                  size={30}
+                  color="black"
+                />
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.content}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() =>
+                navigation.navigate('CurriculumScreen', {
+                  jsonData,
+                })
+              }>
+              <Image
+                source={require('../assets/icons/cur.png')}
+                style={styles.menuItemImageChangePass}
+              />
+
+              <Text style={styles.menuItemText}>View Curriculum</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() =>
+                navigation.navigate('ChangePassScreen', {jsonData})
+              }>
+              <Icon
+                name="cog"
+                size={40}
+                color="#000"
+                style={styles.menuItemImageProfile}
+              />
+              <Text style={styles.menuItemText}>Change Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuItem1}
+              onPress={handleButtonPress}>
+              <Icon
+                name="sign-out"
+                size={40}
+                color="#000"
+                style={styles.menuItemImageFaq}
+              />
+              <Text style={styles.menuItemText}>Exit App</Text>
+            </TouchableOpacity>
+          </View>
         </Animatable.View>
       </ImageBackground>
     </View>
@@ -115,15 +142,100 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {},
+  btnchat: {
+    position: 'absolute',
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    marginTop: 550,
+    marginBottom: 30,
+    borderRadius: 50,
+    width: 325,
+    left: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFCD38',
+    shadowColor: 'black',
+    elevation: 15,
+  },
+  textchat: {
+    fontSize: 32,
+    fontFamily: 'Poppins-Bold',
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  content: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginTop: 70,
+  },
+  menuItem: {
+    width: 150,
+    height: 85,
+    backgroundColor: 'white',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: -60,
+    marginTop: 120,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  menuItem1: {
+    width: 150,
+    height: 85,
+    backgroundColor: 'white',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: -60,
+    marginTop: 100,
+    shadowColor: 'black',
+    left: 100,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  menuItemImageFaq: {
+    marginBottom: 5,
+  },
+  menuItemImageChangePass: {
+    width: 40,
+    height: 40,
+    marginBottom: 5,
+  },
+  menuItemImageProfile: {
+    marginBottom: 5,
+  },
+  menuItemText: {
+    fontFamily: 'Poppins-Bold',
+    color: '#541690',
+    marginTop: 0,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   // Styles used in the return statement
   image: {
     width: '100%',
     height: '100%',
   },
   circle: {
-    width: 60,
-    height: 60,
-    top: -70,
+    width: 70,
+    height: 70,
+    top: -60,
     left: 10,
     borderRadius: 60,
     backgroundColor: 'white',
@@ -132,8 +244,8 @@ const styles = StyleSheet.create({
   },
   Profil: {
     position: 'absolute',
-    top: -55,
-    left: 25,
+    top: -45,
+    left: 30,
   },
   getback: {
     top: 500,
@@ -146,7 +258,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   gettext: {
-    fontSize: 32,
+    fontSize: 30,
     fontFamily: 'Poppins-Bold',
     top: 500,
     left: 50,
@@ -159,22 +271,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   text1: {
-    fontSize: 24,
+    fontSize: 30,
+    fontFamily: 'Poppins-Bold',
+    color: 'white',
+    top: 100,
+    margin: 1,
+    textAlign: 'center',
+  },
+  text2: {
+    fontSize: 30,
     fontFamily: 'Poppins-Bold',
     color: 'white',
     top: 90,
     margin: 1,
-    paddingLeft: 50,
-    paddingRight: 50,
-  },
-  text2: {
-    fontSize: 24,
-    fontFamily: 'Poppins-Bold',
-    color: 'white',
-    top: 80,
-    margin: 1,
-    paddingLeft: 150,
-    paddingRight: 50,
+    textAlign: 'center',
   },
   back: {
     width: 140,
