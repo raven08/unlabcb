@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef ,useEffect} from 'react';
 import {
   View,
   TextInput,
@@ -12,16 +12,40 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import Icon
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const ChatScreen = ({navigation, route}) => {
-  const {jsonData} = route.params;
-  const email = jsonData[0].email; // Mengambil email dari jsonData
-  const [inputText, setInputText] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [recentQuestions, setRecentQuestions] = useState([]);
+   const {jsonData} = route.params;
+   const email = jsonData[0].email;
+   const [inputText, setInputText] = useState('');
+   const [messages, setMessages] = useState([]);
+   const [recentQuestions, setRecentQuestions] = useState([]);
 
   const flatListRef = useRef(null);
+  useEffect(() => {
+    // Load recent questions from AsyncStorage on component mount
+    loadRecentQuestions();
+  }, []);
 
+  const loadRecentQuestions = async () => {
+    try {
+      const storedQuestions = await AsyncStorage.getItem('recentQuestions');
+      if (storedQuestions !== null) {
+        setRecentQuestions(JSON.parse(storedQuestions));
+      }
+    } catch (error) {
+      console.error('Error loading recent questions:', error);
+    }
+  };
+
+  const saveRecentQuestions = async questions => {
+    try {
+      await AsyncStorage.setItem('recentQuestions', JSON.stringify(questions));
+    } catch (error) {
+      console.error('Error saving recent questions:', error);
+    }
+  };
   const sendQuestion = async () => {
     try {
       const response = await fetch('https://coursebot.online:8000/chat', {
@@ -83,7 +107,7 @@ const ChatScreen = ({navigation, route}) => {
       const uploadResponseData = await uploadResponse.json();
       console.log('Upload Response:', uploadResponseData);
 
-      setRecentQuestions([inputText, ...recentQuestions]); // Menambah pertanyaan baru ke awal daftar
+      await saveRecentQuestions([inputText, ...recentQuestions]); // Menambah pertanyaan baru ke awal daftar
     } catch (error) {
       console.error('Error:', error);
     }
